@@ -9,8 +9,6 @@
 #include <zephyr/logging/log.h>
 #include <stdio.h>
 #include <stdlib.h>
-// #include <psa/crypto.h>
-// #include <psa/crypto_extra.h>
 
 #ifdef CONFIG_BUILD_WITH_TFM
 #include <tfm_ns_interface.h>
@@ -88,7 +86,9 @@ static uint8_t m_hash[NRF_CRYPTO_EXAMPLE_ECDSA_HASH_SIZE];
 
 /* ====================================================================== */
 
-/*
+#include <psa/crypto.h>
+#include <psa/crypto_extra.h>
+
 // static psa_key_id_t keypair_id;
 static psa_key_id_t pub_key_id;
 
@@ -203,7 +203,6 @@ int verify_message(void)
 	return APP_SUCCESS;
 }
 
-*/
 
 // int import_ecdsa_keypair(void)
 // {
@@ -301,11 +300,11 @@ int main(void)
 
 	LOG_INF("Starting ECDSA example...");
 
-	// status = crypto_init();
-	// if (status != APP_SUCCESS) {
-	// 	LOG_INF(APP_ERROR_MESSAGE);
-	// 	return APP_ERROR;
-	// }
+	status = crypto_init();
+	if (status != APP_SUCCESS) {
+		LOG_INF(APP_ERROR_MESSAGE);
+		return APP_ERROR;
+	}
 
 	// status = import_ecdsa_keypair();
 	// if (status != APP_SUCCESS) {
@@ -313,11 +312,11 @@ int main(void)
 	// 	return APP_ERROR;
 	// }
 
-	// status = import_ecdsa_pub_key();
-	// if (status != APP_SUCCESS) {
-	// 	LOG_INF(APP_ERROR_MESSAGE);
-	// 	return APP_ERROR;
-	// }
+	status = import_ecdsa_pub_key();
+	if (status != APP_SUCCESS) {
+		LOG_INF(APP_ERROR_MESSAGE);
+		return APP_ERROR;
+	}
 
 	// status = sign_message();
 	// if (status != APP_SUCCESS) {
@@ -325,17 +324,17 @@ int main(void)
 	// 	return APP_ERROR;
 	// }
 
-	// status = verify_message();
-	// if (status != APP_SUCCESS) {
-	// 	LOG_INF(APP_ERROR_MESSAGE);
-	// 	return APP_ERROR;
-	// }
+	status = verify_message();
+	if (status != APP_SUCCESS) {
+		LOG_INF(APP_ERROR_MESSAGE);
+		return APP_ERROR;
+	}
 
-	// status = crypto_finish();
-	// if (status != APP_SUCCESS) {
-	// 	LOG_INF(APP_ERROR_MESSAGE);
-	// 	return APP_ERROR;
-	// }
+	status = crypto_finish();
+	if (status != APP_SUCCESS) {
+		LOG_INF(APP_ERROR_MESSAGE);
+		return APP_ERROR;
+	}
 
 	LOG_INF(APP_SUCCESS_MESSAGE);
 
